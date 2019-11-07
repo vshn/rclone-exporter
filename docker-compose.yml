@@ -1,0 +1,23 @@
+version: "3"
+services:
+  pushgateway:
+    image: docker.io/prom/pushgateway
+    ports:
+    - "9091:9091"
+  prometheus:
+    image: docker.io/prom/prometheus
+    ports:
+    - "9090:9090"
+    volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  rclone:
+    image: docker.io/rclone/rclone:1.50
+    stdin_open: true
+    tty: true
+    entrypoint: sh
+    volumes:
+    - ./rclone.conf:/config/rclone/rclone.conf
+    ports:
+    - "5572:5572"
+    user: "1000:1000"
+    #command: rclone --rc --rc-addr "0.0.0.0:5572" -v sync source:bucket target:bucket
