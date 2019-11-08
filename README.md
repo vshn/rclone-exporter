@@ -26,7 +26,7 @@ docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
 ### Run just the exporter
 
 ```bash
-docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
+docker run --rm -p 8080:8080 docker.io/vshn/rclone-exporter:<tag-on-docker-hub> <CLI-args-see-below>
 ```
 
 ### Run full stack with Prometheus
