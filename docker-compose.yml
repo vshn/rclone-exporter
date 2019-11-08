@@ -21,3 +21,15 @@ services:
     - "5572:5572"
     user: "1000:1000"
     #command: rclone --rc --rc-addr "0.0.0.0:5572" -v sync source:bucket target:bucket
+  exporter:
+    image: docker.io/vshn/rclone-exporter
+    build: .
+    command:
+    - --push.url
+    - http://pushgateway:9091
+    - --scrape.url
+    - http://rclone:5572
+    - --push.interval
+    - 15s
+    ports:
+    - "8080:8080"

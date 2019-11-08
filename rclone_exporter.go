@@ -78,7 +78,7 @@ func PushRegularly(cfg ConfigMap) {
 		logEvent := log.WithField("url", cfg.Push.Url)
 		err := pushMetrics(cfg)
 		if err == nil {
-			logEvent.Info("Pushed metrics.")
+			logEvent.Debug("Pushed metrics.")
 		} else {
 			logEvent.WithError(err).Error("Could not push to pushgateway.")
 		}
