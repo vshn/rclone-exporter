@@ -21,3 +21,5 @@ ENTRYPOINT ["/usr/bin/rclone_exporter"]
 CMD ["--help"]
 
 COPY --from=builder /go/src/app/rclone_exporter /usr/bin/
+
+USER 1000:0

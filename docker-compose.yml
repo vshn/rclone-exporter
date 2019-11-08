@@ -16,7 +16,7 @@ services:
     tty: true
     entrypoint: sh
     volumes:
-    - ./rclone.conf:/config/rclone/rclone.conf
+    - ./:/config/rclone/rclone.conf
     ports:
     - "5572:5572"
     user: "1000:1000"

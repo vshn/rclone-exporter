@@ -1,0 +1,19 @@
+[source]
+type = s3
+provider = Other
+env_auth = false
+access_key_id =
+secret_access_key =
+region = ch-dk-2
+endpoint = sos-ch-dk-2.exo.io
+acl = private
+
+[target]
+type = s3
+provider = Other
+env_auth = false
+access_key_id =
+secret_access_key =
+region = cloudscale
+endpoint = objects.cloudscale.ch
+acl = private
