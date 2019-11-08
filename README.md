@@ -2,6 +2,7 @@
 
 A prometheus metrics exporter for Rclone
 
+
 ## Build
 
 Auto-build is enabled on Docker Hub upon git tag pushes.
@@ -23,6 +24,8 @@ docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
 
 ## Run
 
+[Docker Image tags on Docker Hub](https://hub.docker.com/r/vshn/rclone-exporter/tags)
+
 ### Run just the exporter
 
 ```bash
@@ -39,7 +42,7 @@ docker-compose up --build -d
 docker-compose exec -d rclone rclone --rc --rc-addr "0.0.0.0:5572" -v sync source:bucket target:bucket
 ```
 
-3. Visit `http://localhost:8080` in your browser for the exporter, or `http://localhost:9090` for Prometheus
+3. Visit http://localhost:8080 in your browser for the exporter, or http://localhost:9090 for Prometheus
 
 ## CLI args
 
