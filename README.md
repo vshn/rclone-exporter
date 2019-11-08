@@ -18,7 +18,7 @@ go build ./
 
 ```bash
 tag=docker.io/vshn/rclone-exporter:latest
-docker build -t docker.io/vshn/rclone-exporter:latest .
+docker build -t ${tag} .
 docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
 ```
 
