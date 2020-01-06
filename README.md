@@ -1,24 +1,30 @@
 # rclone-exporter
 
-A prometheus metrics exporter for Rclone
+[![dockeri.co](https://dockeri.co/image/vshn/rclone-exporter)](https://hub.docker.com/r/vshn/rclone-exporter)
 
+![](https://img.shields.io/github/workflow/status/vshn/rclone-exporter/Release)
+![](https://img.shields.io/github/v/release/vshn/rclone-exporter?include_prereleases)
+![](https://img.shields.io/github/issues-raw/vshn/rclone-exporter)
+![](https://img.shields.io/github/issues-pr-raw/vshn/rclone-exporter)
+![](https://img.shields.io/github/license/vshn/rclone-exporter)
+
+A prometheus metrics exporter for Rclone
 
 ## Build
 
-Auto-build is enabled on Docker Hub upon git tag pushes.
-
-### With Go
+### With Goreleaser
 
 ```bash
-go mod download
-go build ./
+goreleaser release --snapshot --rm-dist
+dist/rclone-exporter_linux_amd64/rclone-exporter --help
 ```
 
-### With Docker
+Goreleaser also builds the Docker image directly.
+
+### Run Docker
 
 ```bash
-tag=docker.io/vshn/rclone-exporter:1
-docker build -t ${tag} .
+tag=vshn/rclone-exporter:1
 docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
 ```
 

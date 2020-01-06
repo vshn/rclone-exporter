@@ -22,7 +22,7 @@ services:
     user: "1000:1000"
     #command: rclone --rc --rc-addr "0.0.0.0:5572" -v sync source:bucket target:bucket
   exporter:
-    image: docker.io/vshn/rclone-exporter
+    image: docker.io/vshn/rclone-exporter:1
     build: .
     command:
     - --push.url
