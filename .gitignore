@@ -13,3 +13,4 @@
 /.idea
 /rclone.conf
 /rclone_exporter
+/dist

@@ -1,0 +1,41 @@
+# Make sure to check the documentation at http://goreleaser.com
+
+builds:
+- env:
+  - CGO_ENABLED=0 # this is needed otherwise the Docker image build is faulty
+  goarch:
+  - amd64
+  - arm
+  - arm64
+  - 386
+  goos:
+  - linux
+  - darwin
+  goarm:
+  - 7
+
+archives:
+- format: binary
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-snapshot"
+
+dockers:
+- image_templates:
+  - "docker.io/vshn/rclone-exporter:{{ .Tag }}"
+  - "docker.io/vshn/rclone-exporter:{{ .Major }}"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+
+release:
+  github:
+    owner: vshn
+    name: rclone-exporter
