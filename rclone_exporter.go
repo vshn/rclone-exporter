@@ -161,7 +161,7 @@ func resetStats() {
 func convertJson(reader io.Reader, model interface{}) error {
 	err := json.NewDecoder(reader).Decode(model)
 	if err != nil {
-		return fmt.Errorf("could not parse JSON: %w", err)
+		return fmt.Errorf("could not parse JSON: %v", err)
 	} else {
 		return nil
 	}
@@ -173,6 +173,6 @@ func collect(url string, model interface{}) error {
 		jsonErr := convertJson(response.Body, model)
 		return jsonErr
 	} else {
-		return fmt.Errorf("could not scrape rclone: %w", err)
+		return fmt.Errorf("could not scrape rclone: %v", err)
 	}
 }
