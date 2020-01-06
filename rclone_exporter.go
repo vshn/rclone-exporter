@@ -8,6 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/client_golang/prometheus/push"
 	log "github.com/sirupsen/logrus"
+	"io"
 	"net/http"
 	url2 "net/url"
 	"time"
@@ -157,12 +158,21 @@ func resetStats() {
 	deletesMetric.Set(0)
 }
 
+func convertJson(reader io.Reader, model interface{}) error {
+	err := json.NewDecoder(reader).Decode(model)
+	if err != nil {
+		return fmt.Errorf("could not parse JSON: %w", err)
+	} else {
+		return nil
+	}
+}
+
 func collect(url string, model interface{}) error {
 	response, err := http.PostForm(url, url2.Values{})
 	if err == nil {
-		decodeErr := json.NewDecoder(response.Body).Decode(model)
-		return decodeErr
+		jsonErr := convertJson(response.Body, model)
+		return jsonErr
 	} else {
-		return err
+		return fmt.Errorf("could not scrape rclone: %w", err)
 	}
 }
