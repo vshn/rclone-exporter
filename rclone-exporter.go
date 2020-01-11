@@ -8,14 +8,34 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/client_golang/prometheus/push"
 	log "github.com/sirupsen/logrus"
+	flag "github.com/spf13/pflag"
 	"io"
 	"net/http"
 	url2 "net/url"
+	"os"
 	"time"
 )
 
-func main() {
+var (
+	coreStatsUrl *url2.URL
+	promHandler               = promhttp.Handler()
+	pusher       *push.Pusher = nil
+	version                   = "latest"
+	commit                    = "snapshot"
+	date                      = "unknown"
+	helpText                  = `%s (version %s, %s, %s)
 
+All flags can be read from Environment variables as well (replace . with _ , e.g. LOG_LEVEL).
+However, CLI flags take precedence.
+
+`
+)
+
+func main() {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, helpText, os.Args[0], version, commit, date)
+		flag.PrintDefaults()
+	}
 	if err := LoadConfig(); err != nil {
 		log.WithError(err).Error("Could not load config.")
 	}
@@ -28,16 +48,19 @@ func main() {
 		log.WithError(err).Fatal("Can not start with incorrect URL.")
 	}
 	url.Path = "/core/stats"
-	coreStatsUrl = url.String()
+	if cfg.Scrape.BasicAuth.Username != "" {
+		url.User = url2.UserPassword(cfg.Scrape.BasicAuth.Username, cfg.Scrape.BasicAuth.Password)
+	}
+	coreStatsUrl = url
 
 	if cfg.Push.Url == "" {
 		log.Warn("There is no pushgateway URL defined. Pushes will fail.")
 	}
 
 	log.WithFields(log.Fields{
-		"scrape-url": cfg.Scrape.Url,
+		"scrape-url": GetFriendlyUrlString(cfg.Scrape.Url),
 		"bind-addr":  cfg.BindAddr,
-		"push-url":   cfg.Push.Url,
+		"push-url":   GetFriendlyUrlString(cfg.Push.Url),
 	}).Info("Starting exporter.")
 
 	pusher = push.New(cfg.Push.Url, cfg.Push.JobName).Gatherer(prometheus.DefaultGatherer)
@@ -54,12 +77,6 @@ func main() {
 	}
 }
 
-var (
-	coreStatsUrl              = ""
-	promHandler               = promhttp.Handler()
-	pusher       *push.Pusher = nil
-)
-
 func PushRegularly(cfg ConfigMap) {
 	if cfg.Push.Url == "" {
 		log.Error("There is no pushgateway URL defined. Not pushing regularly.")
@@ -74,9 +91,10 @@ func PushRegularly(cfg ConfigMap) {
 	for {
 		scrapeErr := scrape()
 		if scrapeErr != nil {
-			log.WithError(err).Debug("Could not scrape metrics from rclone, assuming rclone is not running now.")
+			log.WithError(scrapeErr).
+				Warn("Could not scrape metrics from rclone, assuming rclone is not running now.")
 		}
-		logEvent := log.WithField("url", cfg.Push.Url)
+		logEvent := log.WithField("url", GetFriendlyUrlString(cfg.Push.Url))
 		err := pushMetrics(cfg)
 		if err == nil {
 			logEvent.Debug("Pushed metrics.")
@@ -97,11 +115,11 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 
 func handlePush(w http.ResponseWriter, r *http.Request) {
 	cfg := GetConfig()
-	logEvent := log.WithField("url", cfg.Push.Url)
+	logEvent := log.WithField("url", GetFriendlyUrlString(cfg.Push.Url))
 	err := pushMetrics(cfg)
 	if err == nil {
 		logEvent.Info("Pushed to pushgateway.")
-		fmt.Fprintf(w, "Successfully pushed to %s", cfg.Push.Url)
+		fmt.Fprintf(w, "Successfully pushed to %s", GetFriendlyUrlString(cfg.Push.Url))
 	} else {
 		logEvent.WithError(err).Error("Could not push to pushgateway.")
 		w.WriteHeader(500)
@@ -111,8 +129,8 @@ func handlePush(w http.ResponseWriter, r *http.Request) {
 
 func scrape() error {
 	coreStats := CoreStats{}
-	log.WithField("url", coreStatsUrl).Debug("Collecting core stats.")
-	if err := collect(coreStatsUrl, &coreStats); err != nil {
+	log.WithField("url", GetFriendlyUrl(coreStatsUrl)).Debug("Collecting core stats.")
+	if err := collect(coreStatsUrl.String(), &coreStats); err != nil {
 		resetStats()
 		upMetrics.Set(0)
 		return err

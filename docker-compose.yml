@@ -20,7 +20,7 @@ services:
     ports:
     - "5572:5572"
     user: "1000:1000"
-    #command: rclone --rc --rc-addr "0.0.0.0:5572" -v sync source:bucket target:bucket
+    #command: rclone --rc --rc-addr "0.0.0.0:5572" --rc-user user --rc-pass password -v serve http source:bucket
   exporter:
     image: docker.io/vshn/rclone-exporter:1
     build: .
@@ -29,7 +29,11 @@ services:
     - http://pushgateway:9091
     - --scrape.url
     - http://rclone:5572
-    - --push.interval
-    - 15s
+    # Example of configuring Basic Auth and other options with ENV vars
+    #environment:
+      #PUSH_INTERVAL: 15s
+      #LOG_LEVEL: debug
+      #SCRAPE_BASICAUTH_USERNAME: user
+      #SCRAPE_BASICAUTH_PASSWORD: password
     ports:
     - "8080:8080"
