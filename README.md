@@ -32,6 +32,9 @@ docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
 
 [Docker Image tags on Docker Hub](https://hub.docker.com/r/vshn/rclone-exporter/tags)
 
+(Hint: When running with BasicAuth, the logs will not output the credentials. 
+This might be confusing when trying to debug an issue)
+
 ### Run just the exporter
 
 ```bash
@@ -67,3 +70,10 @@ However, CLI flags take precedence.
       --scrape.basicauth.username string   Username if rclone instance is BasicAuth protected (ENV var preferred)
       --scrape.url string                  Base URL of the rclone instance with rc enabled (default "http://localhost:5572/")
 ```
+
+## Environment variables
+
+Alternatively, all flags are also configurable with Environment variables.
+Replace the `.` char with `_` and uppercase the names in order for them to be recognized.
+
+e.g. `--log.level debug` becomes `LOG_LEVEL=debug`
