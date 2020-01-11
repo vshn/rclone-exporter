@@ -24,7 +24,7 @@ Goreleaser also builds the Docker image directly.
 ### Run Docker
 
 ```bash
-tag=vshn/rclone-exporter:1
+tag=vshn/rclone-exporter:v1
 docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
 ```
 

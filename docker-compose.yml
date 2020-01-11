@@ -22,7 +22,7 @@ services:
     user: "1000:1000"
     #command: rclone --rc --rc-addr "0.0.0.0:5572" --rc-user user --rc-pass password -v serve http source:bucket
   exporter:
-    image: docker.io/vshn/rclone-exporter:1
+    image: docker.io/vshn/rclone-exporter:v1
     build: .
     command:
     - --push.url
