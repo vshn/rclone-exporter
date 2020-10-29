@@ -11,7 +11,7 @@ services:
     volumes:
     - ./prometheus.yml:/etc/prometheus/prometheus.yml
   rclone:
-    image: docker.io/rclone/rclone:1.50
+    image: docker.io/rclone/rclone:1.53
     stdin_open: true
     tty: true
     entrypoint: sh
