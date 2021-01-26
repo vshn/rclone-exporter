@@ -1,12 +1,10 @@
-# rclone-exporter
+# rclone-exporter (UNMAINTAINED)
 
-[![dockeri.co](https://dockeri.co/image/vshn/rclone-exporter)](https://hub.docker.com/r/vshn/rclone-exporter)
+## This project is not maintained anymore
 
-![](https://img.shields.io/github/workflow/status/vshn/rclone-exporter/Release)
-![](https://img.shields.io/github/v/release/vshn/rclone-exporter?include_prereleases)
-![](https://img.shields.io/github/issues-raw/vshn/rclone-exporter)
-![](https://img.shields.io/github/issues-pr-raw/vshn/rclone-exporter)
-![](https://img.shields.io/github/license/vshn/rclone-exporter)
+Rclone features prometheus metrics built-in, see https://rclone.org/flags/
+
+---
 
 A prometheus metrics exporter for Rclone
 
