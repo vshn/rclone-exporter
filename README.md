@@ -23,12 +23,11 @@ Goreleaser also builds the Docker image directly.
 
 ```bash
 tag=vshn/rclone-exporter:v1
+docker build -t ${tag} .
 docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
 ```
 
 ## Run
-
-[Docker Image tags on Docker Hub](https://hub.docker.com/r/vshn/rclone-exporter/tags)
 
 (Hint: When running with BasicAuth, the logs will not output the credentials. 
 This might be confusing when trying to debug an issue)
@@ -36,7 +35,7 @@ This might be confusing when trying to debug an issue)
 ### Run just the exporter
 
 ```bash
-docker run --rm -p 8080:8080 docker.io/vshn/rclone-exporter:<tag-on-docker-hub> <CLI-args-see-below>
+docker run --rm -p 8080:8080 ${tag} <CLI-args-see-below>
 ```
 
 ### Run full stack with Prometheus
